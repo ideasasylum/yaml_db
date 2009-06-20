@@ -17,7 +17,9 @@ namespace :db do
 
 		desc "Load contents of db/data.yml into database"
 		task(:load => :environment) do
-			YamlDb.load db_dump_data_file
+      file = ENV['file'] if ENV.include?("file")
+      file ||= db_dump_data_file
+			YamlDb.load file
 		end
 	end
 end
