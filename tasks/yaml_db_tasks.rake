@@ -10,16 +10,18 @@ namespace :db do
 			"#{RAILS_ROOT}/db/data.yml"
 		end
 
-		desc "Dump contents of database to db/data.yml"
+		desc "Dump contents of database to db/data.yml. Optionally set tables=table1,table2,etc. if you want to restrict dump to specific tables. Use file=<datafile> to specify the file"
 		task(:dump => :environment) do
-			YamlDb.dump db_dump_data_file
+      file = ENV['file'] if ENV.include?("file")
+      file ||= db_dump_data_file
+      YamlDb.dump file, ENV['tables']
 		end
 
-		desc "Load contents of db/data.yml into database"
+		desc "Load contents of db/data.yml into database. Use file=<datafile> to specify the yaml file to load"
 		task(:load => :environment) do
       file = ENV['file'] if ENV.include?("file")
       file ||= db_dump_data_file
-			YamlDb.load file
+      YamlDb.load file
 		end
 	end
 end
